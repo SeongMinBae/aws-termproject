@@ -6,6 +6,10 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
+import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
+import com.amazonaws.services.ec2.model.DescribeInstancesResult;
+import com.amazonaws.services.ec2.model.Instance;
+import com.amazonaws.services.ec2.model.Reservation;
 
 public class awsTest {
 	
@@ -63,7 +67,7 @@ public class awsTest {
 		}
 	}
 
-	/*
+	
 	public static void listInstances(){
 		System.out.println("Listing instances....");
 		boolean done = false;
@@ -91,5 +95,5 @@ public class awsTest {
 			}
 		}
 	}
-	*/
+	
 }
