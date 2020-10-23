@@ -53,9 +53,11 @@ public class awsTest {
 			System.out.println("------------------------------------------------------------");
 			System.out.print("Enter an integer: ");
 			
+			number = menu.nextInt();
+			
 			switch(number) {
 				case 1: 
-					//listInstances();
+					listInstances();
 					break;
 			}
 		}
