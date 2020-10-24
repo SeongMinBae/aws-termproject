@@ -12,10 +12,13 @@ import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.DescribeRegionsResult;
 import com.amazonaws.services.ec2.model.Instance;
+import com.amazonaws.services.ec2.model.InstanceType;
 import com.amazonaws.services.ec2.model.RebootInstancesRequest;
 import com.amazonaws.services.ec2.model.RebootInstancesResult;
 import com.amazonaws.services.ec2.model.Region;
 import com.amazonaws.services.ec2.model.Reservation;
+import com.amazonaws.services.ec2.model.RunInstancesRequest;
+import com.amazonaws.services.ec2.model.RunInstancesResult;
 import com.amazonaws.services.ec2.model.StartInstancesRequest;
 import com.amazonaws.services.ec2.model.StopInstancesRequest;
 
@@ -203,8 +206,23 @@ public class awsTest {
 	
 	/*
 	 * 6번 기능
+	 * 참고 : https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:
 	 */
 	public static void createInstance() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter ami id: ");
+		String id = sc.next();
+		
+		RunInstancesRequest run_request = new RunInstancesRequest()
+												    .withImageId(id)
+												    .withInstanceType(InstanceType.T1Micro)
+												    .withMaxCount(1)
+												    .withMinCount(1);
+
+		RunInstancesResult run_response = ec2.runInstances(run_request);
+		String newId = run_response.getReservation().getInstances().get(0).getInstanceId();
+		
+		System.out.println("Successfully started EC2 instance " + newId + " based on AMI " + id);
 	}
 	
 	/*
@@ -218,7 +236,6 @@ public class awsTest {
 		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
 
 		RebootInstancesRequest request = new RebootInstancesRequest().withInstanceIds(id);
-		RebootInstancesResult response = ec2.rebootInstances(request);
 		
 		System.out.println("Successfully rebooted instance " + id);
 	}
@@ -227,6 +244,7 @@ public class awsTest {
 	 * 8번 기능
 	 */
 	public static void listImages() {
+		
 	}
 	
 }
