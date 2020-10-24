@@ -1,16 +1,16 @@
 package awsTerm;
 
-import java.util.List;
 import java.util.Scanner;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.services.cloudhsm.model.ListAvailableZonesResult;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
+import com.amazonaws.services.ec2.model.DescribeRegionsResult;
 import com.amazonaws.services.ec2.model.Instance;
+import com.amazonaws.services.ec2.model.Region;
 import com.amazonaws.services.ec2.model.Reservation;
 
 public class awsTest {
@@ -66,7 +66,10 @@ public class awsTest {
 					listInstances();
 					break;
 				case 2:
-					availableZones();
+					//availableZones();
+					break;
+				case 4:
+					availableRegions();
 			}
 		}
 	}
@@ -99,14 +102,16 @@ public class awsTest {
 		}
 	}
 	
-	public static void availableZones() {
-		System.out.println("Available zones....");
-		ListAvailableZonesResult request = new ListAvailableZonesResult();
-		List<String> zonesArr = request.getAZList();
-		System.out.println(zonesArr.isEmpty());
-		/*
-		 * for(String str : zonesArr) { System.out.println(str); }
-		 */
-		System.out.println("You have access to" + "Availability Zones");
+	public static void availableRegions() {
+		System.out.println("Available regions....");
+		DescribeRegionsResult regions_response = ec2.describeRegions();
+
+		for(Region region : regions_response.getRegions()) {
+		    System.out.printf(
+	    		"[region] %20s, " 
+				+"[endpoint] %20s\n" 
+				,region.getRegionName()
+		       ,region.getEndpoint());
+		}
 	}
 }
