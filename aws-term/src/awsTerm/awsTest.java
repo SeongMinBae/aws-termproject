@@ -8,13 +8,14 @@ import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.AvailabilityZone;
 import com.amazonaws.services.ec2.model.DescribeAvailabilityZonesResult;
+import com.amazonaws.services.ec2.model.DescribeImagesResult;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.DescribeRegionsResult;
+import com.amazonaws.services.ec2.model.Image;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.InstanceType;
 import com.amazonaws.services.ec2.model.RebootInstancesRequest;
-import com.amazonaws.services.ec2.model.RebootInstancesResult;
 import com.amazonaws.services.ec2.model.Region;
 import com.amazonaws.services.ec2.model.Reservation;
 import com.amazonaws.services.ec2.model.RunInstancesRequest;
@@ -244,7 +245,18 @@ public class awsTest {
 	 * 8번 기능
 	 */
 	public static void listImages() {
-		
+		System.out.println("Listing images....");
+		DescribeImagesResult imagesList = ec2.describeImages();
+		System.out.println(1234);
+		for(Image image : imagesList.getImages()) {
+		    System.out.printf(
+	    		"[imageID] %20s, " 
+				+"[Name] %20s, "
+				+ "[Owner] %20s \n" 
+				,image.getImageId()
+		       ,image.getName()
+		       ,image.getOwnerId());
+		}
 	}
 	
 }
