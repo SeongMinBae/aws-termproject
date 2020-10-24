@@ -14,6 +14,7 @@ import com.amazonaws.services.ec2.model.DescribeRegionsResult;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.Region;
 import com.amazonaws.services.ec2.model.Reservation;
+import com.amazonaws.services.ec2.model.StartInstancesRequest;
 
 public class awsTest {
 	
@@ -72,17 +73,22 @@ public class awsTest {
 					availableZones();
 					break;
 				case 3:
+					startInstance();
 					break;
 				case 4:
 					availableRegions();
 					break;
 				case 5:
+					stopInstance();
 					break;
 				case 6:
+					createInstance();
 					break;
 				case 7:
+					rebootInstance();
 					break;
 				case 8:
+					listImages();
 					break;
 				case 99:
 					flag = false;
@@ -90,7 +96,9 @@ public class awsTest {
 		}
 	}
 	
-	//1번 기능
+	/*
+	 * 1번 기능
+	 */
 	public static void listInstances(){
 		System.out.println("Listing instances....");
 		boolean done = false;
@@ -142,9 +150,23 @@ public class awsTest {
 	}
 	
 	/*
+	 * 3번 기능
+	 * 참고 : https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:
+	 */
+	public static void startInstance() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter instance id: ");
+		String id = sc.next();
+		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
+		StartInstancesRequest request = new StartInstancesRequest().withInstanceIds(id);
+		ec2.startInstances(request);
+		System.out.println("Starting.... " + id + "\n Successfully started instance" + id);
+	}
+	
+	/*
 	 * 4번 기능
 	 * 참고 : https://docs.aws.amazon.com/ko_kr/sdk-for-java/v1/developer-guide/examples-ec2-regions-zones.html
-	 * */
+	 */
 	public static void availableRegions() {
 		System.out.println("Available regions....");
 		DescribeRegionsResult regionsList = ec2.describeRegions();
@@ -157,4 +179,29 @@ public class awsTest {
 		       ,region.getEndpoint());
 		}
 	}
+	
+	/*
+	 * 5번 기능
+	 */
+	public static void stopInstance() {
+	}
+	
+	/*
+	 * 6번 기능
+	 */
+	public static void createInstance() {
+	}
+	
+	/*
+	 * 7번 기능
+	 */
+	public static void rebootInstance() {
+	}
+	
+	/*
+	 * 8번 기능
+	 */
+	public static void listImages() {
+	}
+	
 }
