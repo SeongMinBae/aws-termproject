@@ -8,6 +8,7 @@ import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.AvailabilityZone;
 import com.amazonaws.services.ec2.model.DescribeAvailabilityZonesResult;
+import com.amazonaws.services.ec2.model.DescribeImagesRequest;
 import com.amazonaws.services.ec2.model.DescribeImagesResult;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
@@ -243,16 +244,19 @@ public class awsTest {
 	
 	/*
 	 * 8번 기능
+	 * 트러블슈팅 : https://www.codota.com/code/java/methods/com.amazonaws.services.ec2.AmazonEC2/describeImages
 	 */
 	public static void listImages() {
 		System.out.println("Listing images....");
-		DescribeImagesResult imagesList = ec2.describeImages();
-		System.out.println(1234);
+		DescribeImagesRequest request = new DescribeImagesRequest();
+		request.withOwners("self");
+		DescribeImagesResult imagesList = ec2.describeImages(request);
+		
 		for(Image image : imagesList.getImages()) {
 		    System.out.printf(
 	    		"[imageID] %20s, " 
-				+"[Name] %20s, "
-				+ "[Owner] %20s \n" 
+				+"[Name] %10s, "
+				+ "[Owner] %10s \n" 
 				,image.getImageId()
 		       ,image.getName()
 		       ,image.getOwnerId());
