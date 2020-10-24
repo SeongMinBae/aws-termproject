@@ -12,9 +12,12 @@ import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.DescribeRegionsResult;
 import com.amazonaws.services.ec2.model.Instance;
+import com.amazonaws.services.ec2.model.RebootInstancesRequest;
+import com.amazonaws.services.ec2.model.RebootInstancesResult;
 import com.amazonaws.services.ec2.model.Region;
 import com.amazonaws.services.ec2.model.Reservation;
 import com.amazonaws.services.ec2.model.StartInstancesRequest;
+import com.amazonaws.services.ec2.model.StopInstancesRequest;
 
 public class awsTest {
 	
@@ -158,8 +161,10 @@ public class awsTest {
 		System.out.print("Enter instance id: ");
 		String id = sc.next();
 		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
+		
 		StartInstancesRequest request = new StartInstancesRequest().withInstanceIds(id);
 		ec2.startInstances(request);
+		
 		System.out.println("Starting.... " + id + "\n Successfully started instance" + id);
 	}
 	
@@ -182,8 +187,18 @@ public class awsTest {
 	
 	/*
 	 * 5번 기능
+	 * 참고 : https://docs.aws.amazon.com/ko_kr/sdk-for-java/v1/developer-guide/examples-ec2-instances.html
 	 */
 	public static void stopInstance() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter instance id: ");
+		String id = sc.next();
+		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
+
+		StopInstancesRequest request = new StopInstancesRequest().withInstanceIds(id);
+		ec2.stopInstances(request);
+		
+		System.out.println("Successfully stop instance " + id);
 	}
 	
 	/*
@@ -194,8 +209,18 @@ public class awsTest {
 	
 	/*
 	 * 7번 기능
+	 * 참고 : https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:
 	 */
 	public static void rebootInstance() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter instance id: ");
+		String id = sc.next();
+		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
+
+		RebootInstancesRequest request = new RebootInstancesRequest().withInstanceIds(id);
+		RebootInstancesResult response = ec2.rebootInstances(request);
+		
+		System.out.println("Successfully rebooted instance " + id);
 	}
 	
 	/*
