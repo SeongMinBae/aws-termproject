@@ -6,6 +6,8 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
+import com.amazonaws.services.ec2.model.AvailabilityZone;
+import com.amazonaws.services.ec2.model.DescribeAvailabilityZonesResult;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.DescribeRegionsResult;
@@ -42,7 +44,8 @@ public class awsTest {
 		Scanner menu = new Scanner(System.in);
 		Scanner id_string= new Scanner(System.in);
 		int number = 0;
-		while(true){
+		boolean flag = true;
+		while(flag){
 			System.out.println("                                                            ");
 			System.out.println("                                                            ");
 			System.out.println("------------------------------------------------------------");
@@ -66,14 +69,28 @@ public class awsTest {
 					listInstances();
 					break;
 				case 2:
-					//availableZones();
+					availableZones();
+					break;
+				case 3:
 					break;
 				case 4:
 					availableRegions();
+					break;
+				case 5:
+					break;
+				case 6:
+					break;
+				case 7:
+					break;
+				case 8:
+					break;
+				case 99:
+					flag = false;
 			}
 		}
 	}
 	
+	//1번 기능
 	public static void listInstances(){
 		System.out.println("Listing instances....");
 		boolean done = false;
@@ -102,11 +119,37 @@ public class awsTest {
 		}
 	}
 	
+	/*
+	 * 2번 기능
+	 * 참고 : https://docs.aws.amazon.com/ko_kr/sdk-for-java/v1/developer-guide/examples-ec2-regions-zones.html
+	 */
+	public static void availableZones() {
+		System.out.println("Available regions....");
+		
+		DescribeAvailabilityZonesResult zonesList = ec2.describeAvailabilityZones();
+		
+		for(AvailabilityZone zone : zonesList.getAvailabilityZones()) {
+		    System.out.printf(
+		        "[id] %10s " +
+		        "[region] %10s " +
+		        "[zone] %10s\n",
+		        zone.getZoneId(),
+		        zone.getRegionName(),
+		        zone.getZoneName());
+		}
+		
+		System.out.println("You have access to " + zonesList.getAvailabilityZones().size() + " Availability Zones.");
+	}
+	
+	/*
+	 * 4번 기능
+	 * 참고 : https://docs.aws.amazon.com/ko_kr/sdk-for-java/v1/developer-guide/examples-ec2-regions-zones.html
+	 * */
 	public static void availableRegions() {
 		System.out.println("Available regions....");
-		DescribeRegionsResult regions_response = ec2.describeRegions();
+		DescribeRegionsResult regionsList = ec2.describeRegions();
 
-		for(Region region : regions_response.getRegions()) {
+		for(Region region : regionsList.getRegions()) {
 		    System.out.printf(
 	    		"[region] %20s, " 
 				+"[endpoint] %20s\n" 
