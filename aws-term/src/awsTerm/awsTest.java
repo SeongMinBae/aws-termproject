@@ -9,6 +9,8 @@ import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.AvailabilityZone;
 import com.amazonaws.services.ec2.model.CreateKeyPairRequest;
 import com.amazonaws.services.ec2.model.CreateKeyPairResult;
+import com.amazonaws.services.ec2.model.DeleteKeyPairRequest;
+import com.amazonaws.services.ec2.model.DeleteKeyPairResult;
 import com.amazonaws.services.ec2.model.DescribeAvailabilityZonesResult;
 import com.amazonaws.services.ec2.model.DescribeImagesRequest;
 import com.amazonaws.services.ec2.model.DescribeImagesResult;
@@ -109,6 +111,9 @@ public class awsTest {
 					break;
 				case 10:
 					createKeyPair();
+					break;
+				case 11:
+					deleteKeyPair();
 					break;
 				case 99:
 					flag = false;
@@ -247,7 +252,7 @@ public class awsTest {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter instance id: ");
 		String id = sc.next();
-		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
+		//final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
 
 		RebootInstancesRequest request = new RebootInstancesRequest().withInstanceIds(id);
 		
@@ -299,11 +304,25 @@ public class awsTest {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter key name: ");
 		String keyName = sc.next();
-		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
 		
 		CreateKeyPairRequest request = new CreateKeyPairRequest().withKeyName(keyName);
 		CreateKeyPairResult response = ec2.createKeyPair(request);
 		
 		System.out.println("Successfully created key pair " + keyName);
+	}
+
+	/*
+	 * 11번 기능
+	 * 참고 : https://docs.aws.amazon.com/code-samples/latest/catalog/java-ec2-src-main-java-aws-example-ec2-DeleteKeyPair.java.html
+	 */
+	public static void deleteKeyPair() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter key name: ");
+		String keyName = sc.next();
+		
+		DeleteKeyPairRequest request = new DeleteKeyPairRequest().withKeyName(keyName);
+		DeleteKeyPairResult response = ec2.deleteKeyPair(request);
+		
+		System.out.println("Successfully deleted key pair " + keyName);
 	}
 }
