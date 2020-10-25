@@ -12,10 +12,12 @@ import com.amazonaws.services.ec2.model.DescribeImagesRequest;
 import com.amazonaws.services.ec2.model.DescribeImagesResult;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
+import com.amazonaws.services.ec2.model.DescribeKeyPairsResult;
 import com.amazonaws.services.ec2.model.DescribeRegionsResult;
 import com.amazonaws.services.ec2.model.Image;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.InstanceType;
+import com.amazonaws.services.ec2.model.KeyPairInfo;
 import com.amazonaws.services.ec2.model.RebootInstancesRequest;
 import com.amazonaws.services.ec2.model.Region;
 import com.amazonaws.services.ec2.model.Reservation;
@@ -23,10 +25,6 @@ import com.amazonaws.services.ec2.model.RunInstancesRequest;
 import com.amazonaws.services.ec2.model.RunInstancesResult;
 import com.amazonaws.services.ec2.model.StartInstancesRequest;
 import com.amazonaws.services.ec2.model.StopInstancesRequest;
-import com.amazonaws.services.route53domains.AmazonRoute53Domains;
-import com.amazonaws.services.route53domains.AmazonRoute53DomainsClientBuilder;
-import com.amazonaws.services.route53domains.model.ViewBillingRequest;
-import com.amazonaws.services.route53domains.model.ViewBillingResult;
 
 public class awsTest {
 	
@@ -72,7 +70,7 @@ public class awsTest {
 			System.out.println("  3. start instance               4. available regions      ");
 			System.out.println("  5. stop instance                6. create instance        ");
 			System.out.println("  7. reboot instance              8. list images            ");
-			System.out.println("                                 99. quit                   ");
+			System.out.println("  9. list key pair                99. quit                   ");
 			System.out.println("------------------------------------------------------------");
 			System.out.print("Enter an integer: ");
 			
@@ -104,7 +102,7 @@ public class awsTest {
 					listImages();
 					break;
 				case 9:
-					aImages();
+					listKeyPair();
 					break;
 				case 99:
 					flag = false;
@@ -273,10 +271,18 @@ public class awsTest {
 	
 	/*
 	 * 9번 기능
-	 * 트러블슈팅 : https://www.codota.com/code/java/methods/com.amazonaws.services.ec2.AmazonEC2/describeImages
+	 * 참고 : https://docs.aws.amazon.com/code-samples/latest/catalog/java-ec2-src-main-java-aws-example-ec2-DescribeKeyPairs.java.html
 	 */
-	public static void aImages() {
+	public static void listKeyPair() {
+		DescribeKeyPairsResult response = ec2.describeKeyPairs();
 
+		for(KeyPairInfo key_pair : response.getKeyPairs()) {
+		    System.out.printf(
+		        "[Name] %10s " +
+		        "[Fingerprint] %s\n",
+		        key_pair.getKeyName(),
+		        key_pair.getKeyFingerprint());
+		}
 	}
 	
 }
