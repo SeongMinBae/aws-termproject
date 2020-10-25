@@ -23,17 +23,22 @@ import com.amazonaws.services.ec2.model.RunInstancesRequest;
 import com.amazonaws.services.ec2.model.RunInstancesResult;
 import com.amazonaws.services.ec2.model.StartInstancesRequest;
 import com.amazonaws.services.ec2.model.StopInstancesRequest;
+import com.amazonaws.services.route53domains.AmazonRoute53Domains;
+import com.amazonaws.services.route53domains.AmazonRoute53DomainsClientBuilder;
+import com.amazonaws.services.route53domains.model.ViewBillingRequest;
+import com.amazonaws.services.route53domains.model.ViewBillingResult;
 
 public class awsTest {
 	
 	static AmazonEC2 ec2;
+	static ProfileCredentialsProvider credentialsProvider;
 	private static void init() throws Exception {
 		/* 
 		 * The ProfileCredentialsProvider will return your [default]
 		 * credential profile by reading from the credentials file located at
 		 * (~/.aws/credentials).
 		*/
-		ProfileCredentialsProvider credentialsProvider = new ProfileCredentialsProvider();
+		credentialsProvider = new ProfileCredentialsProvider();
 		try {
 			credentialsProvider.getCredentials();
 		} catch (Exception e) {
@@ -97,6 +102,9 @@ public class awsTest {
 					break;
 				case 8:
 					listImages();
+					break;
+				case 9:
+					aImages();
 					break;
 				case 99:
 					flag = false;
@@ -261,6 +269,14 @@ public class awsTest {
 		       ,image.getName()
 		       ,image.getOwnerId());
 		}
+	}
+	
+	/*
+	 * 9번 기능
+	 * 트러블슈팅 : https://www.codota.com/code/java/methods/com.amazonaws.services.ec2.AmazonEC2/describeImages
+	 */
+	public static void aImages() {
+
 	}
 	
 }
