@@ -7,6 +7,8 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.AvailabilityZone;
+import com.amazonaws.services.ec2.model.CreateKeyPairRequest;
+import com.amazonaws.services.ec2.model.CreateKeyPairResult;
 import com.amazonaws.services.ec2.model.DescribeAvailabilityZonesResult;
 import com.amazonaws.services.ec2.model.DescribeImagesRequest;
 import com.amazonaws.services.ec2.model.DescribeImagesResult;
@@ -70,7 +72,8 @@ public class awsTest {
 			System.out.println("  3. start instance               4. available regions      ");
 			System.out.println("  5. stop instance                6. create instance        ");
 			System.out.println("  7. reboot instance              8. list images            ");
-			System.out.println("  9. list key pair                99. quit                   ");
+			System.out.println("  9. list key pair                10. create key pair                   ");
+			System.out.println("  11. delete key pair             99. quit                   ");
 			System.out.println("------------------------------------------------------------");
 			System.out.print("Enter an integer: ");
 			
@@ -103,6 +106,9 @@ public class awsTest {
 					break;
 				case 9:
 					listKeyPair();
+					break;
+				case 10:
+					createKeyPair();
 					break;
 				case 99:
 					flag = false;
@@ -284,5 +290,20 @@ public class awsTest {
 		        key_pair.getKeyFingerprint());
 		}
 	}
-	
+
+	/*
+	 * 10번 기능
+	 * 참고 : https://docs.aws.amazon.com/code-samples/latest/catalog/java-ec2-src-main-java-aws-example-ec2-CreateKeyPair.java.html
+	 */
+	public static void createKeyPair() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter key name: ");
+		String keyName = sc.next();
+		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
+		
+		CreateKeyPairRequest request = new CreateKeyPairRequest().withKeyName(keyName);
+		CreateKeyPairResult response = ec2.createKeyPair(request);
+		
+		System.out.println("Successfully created key pair " + keyName);
+	}
 }
