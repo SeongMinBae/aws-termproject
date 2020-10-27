@@ -1,16 +1,21 @@
 package awsTerm;
 
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Scanner;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
+import com.amazonaws.services.ec2.model.AccountAttribute;
+import com.amazonaws.services.ec2.model.AccountAttributeValue;
 import com.amazonaws.services.ec2.model.AvailabilityZone;
 import com.amazonaws.services.ec2.model.CreateKeyPairRequest;
 import com.amazonaws.services.ec2.model.CreateKeyPairResult;
 import com.amazonaws.services.ec2.model.DeleteKeyPairRequest;
 import com.amazonaws.services.ec2.model.DeleteKeyPairResult;
+import com.amazonaws.services.ec2.model.DescribeAccountAttributesResult;
 import com.amazonaws.services.ec2.model.DescribeAvailabilityZonesResult;
 import com.amazonaws.services.ec2.model.DescribeImagesRequest;
 import com.amazonaws.services.ec2.model.DescribeImagesResult;
@@ -23,6 +28,7 @@ import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.InstanceType;
 import com.amazonaws.services.ec2.model.KeyPairInfo;
 import com.amazonaws.services.ec2.model.RebootInstancesRequest;
+import com.amazonaws.services.ec2.model.RebootInstancesResult;
 import com.amazonaws.services.ec2.model.Region;
 import com.amazonaws.services.ec2.model.Reservation;
 import com.amazonaws.services.ec2.model.RunInstancesRequest;
@@ -70,12 +76,13 @@ public class awsTest {
 			System.out.println("  Cloud Computing, Computer Science Department              ");
 			System.out.println("                           at ChungbukNational University  ");
 			System.out.println("------------------------------------------------------------");
-			System.out.println("  1. list instance                2. available zones         ");
+			System.out.println("  1. list instance                2. available zones        ");
 			System.out.println("  3. start instance               4. available regions      ");
 			System.out.println("  5. stop instance                6. create instance        ");
 			System.out.println("  7. reboot instance              8. list images            ");
-			System.out.println("  9. list key pair                10. create key pair                   ");
-			System.out.println("  11. delete key pair             99. quit                   ");
+			System.out.println("  9. list key pair                10. create key pair       ");
+			System.out.println("  11. delete key pair             12. information about the AWS account");
+			System.out.println("  99. quit                  ");
 			System.out.println("------------------------------------------------------------");
 			System.out.print("Enter an integer: ");
 			
@@ -114,6 +121,9 @@ public class awsTest {
 					break;
 				case 11:
 					deleteKeyPair();
+					break;
+				case 12:
+					accountDetail();
 					break;
 				case 99:
 					flag = false;
@@ -252,10 +262,10 @@ public class awsTest {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter instance id: ");
 		String id = sc.next();
-		//final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
 
-		RebootInstancesRequest request = new RebootInstancesRequest().withInstanceIds(id);
-		
+       RebootInstancesRequest request = new RebootInstancesRequest().withInstanceIds(id);
+       RebootInstancesResult response = ec2.rebootInstances(request);
+
 		System.out.println("Successfully rebooted instance " + id);
 	}
 	
@@ -324,5 +334,25 @@ public class awsTest {
 		DeleteKeyPairResult response = ec2.deleteKeyPair(request);
 		
 		System.out.println("Successfully deleted key pair " + keyName);
+	}
+	
+	/*
+	 * 12번 기능
+	 * 참고 : https://docs.aws.amazon.com/code-samples/latest/catalog/java-ec2-src-main-java-aws-example-ec2-DescribeAccount.java.html
+	 */
+	public static void accountDetail() {
+		DescribeAccountAttributesResult accountResults = ec2.describeAccountAttributes();
+		List<AccountAttribute> accountList = accountResults.getAccountAttributes();
+		
+		for (ListIterator iter = accountList.listIterator(); iter.hasNext(); ) {
+			AccountAttribute attribute = (AccountAttribute) iter.next();
+			System.out.print("attribute : "+attribute.getAttributeName());
+			List<AccountAttributeValue> values = attribute.getAttributeValues();
+			
+			for (ListIterator iterVals = values.listIterator(); iterVals.hasNext(); ) {
+				AccountAttributeValue AccVal = (AccountAttributeValue) iterVals.next();
+				System.out.println(AccVal.getAttributeValue());
+			}
+		}	
 	}
 }
