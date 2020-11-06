@@ -23,10 +23,13 @@ import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.DescribeKeyPairsResult;
 import com.amazonaws.services.ec2.model.DescribeRegionsResult;
+import com.amazonaws.services.ec2.model.DryRunResult;
+import com.amazonaws.services.ec2.model.DryRunSupportedRequest;
 import com.amazonaws.services.ec2.model.Image;
 import com.amazonaws.services.ec2.model.Instance;
 import com.amazonaws.services.ec2.model.InstanceType;
 import com.amazonaws.services.ec2.model.KeyPairInfo;
+import com.amazonaws.services.ec2.model.MonitorInstancesRequest;
 import com.amazonaws.services.ec2.model.RebootInstancesRequest;
 import com.amazonaws.services.ec2.model.RebootInstancesResult;
 import com.amazonaws.services.ec2.model.Region;
@@ -82,7 +85,7 @@ public class awsTest {
 			System.out.println("  7. reboot instance              8. list images            ");
 			System.out.println("  9. list key pair                10. create key pair       ");
 			System.out.println("  11. delete key pair             12. information about the AWS account");
-			System.out.println("  99. quit                  ");
+			System.out.println("  13. enable monitoring           99. quit                  ");
 			System.out.println("------------------------------------------------------------");
 			System.out.print("Enter an integer: ");
 			
@@ -124,6 +127,9 @@ public class awsTest {
 					break;
 				case 12:
 					accountDetail();
+					break;
+				case 13:
+					enableMonitor();
 					break;
 				case 99:
 					flag = false;
@@ -241,7 +247,6 @@ public class awsTest {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter ami id: ");
 		String id = sc.next();
-		
 		RunInstancesRequest run_request = new RunInstancesRequest()
 												    .withImageId(id)
 												    .withInstanceType(InstanceType.T1Micro)
@@ -354,5 +359,27 @@ public class awsTest {
 				System.out.println(" = " + AccVal.getAttributeValue());
 			}
 		}	
+	}
+    
+	/*
+	 * 13번 기능
+	 * 참고 : https://docs.aws.amazon.com/code-samples/latest/catalog/java-ec2-src-main-java-aws-example-ec2-MonitorInstance.java.html
+	 */
+	@SuppressWarnings("unchecked")
+	public static void enableMonitor() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter instnace id: ");
+		String id = sc.next();
+		
+		DryRunSupportedRequest<MonitorInstancesRequest> dryRequest = () -> {
+		    MonitorInstancesRequest request = new MonitorInstancesRequest().withInstanceIds(id);		
+		    return request.getDryRunRequest();
+		};
+		DryRunResult dry_response = ec2.dryRun(dryRequest);
+		
+		MonitorInstancesRequest request = new MonitorInstancesRequest().withInstanceIds(id);
+		ec2.monitorInstances(request);
+		
+		System.out.println("Successfully enabled monitoring");
 	}
 }
