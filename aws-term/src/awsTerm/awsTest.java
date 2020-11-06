@@ -38,6 +38,7 @@ import com.amazonaws.services.ec2.model.RunInstancesRequest;
 import com.amazonaws.services.ec2.model.RunInstancesResult;
 import com.amazonaws.services.ec2.model.StartInstancesRequest;
 import com.amazonaws.services.ec2.model.StopInstancesRequest;
+import com.amazonaws.services.ec2.model.UnmonitorInstancesRequest;
 
 public class awsTest {
 	
@@ -85,7 +86,8 @@ public class awsTest {
 			System.out.println("  7. reboot instance              8. list images            ");
 			System.out.println("  9. list key pair                10. create key pair       ");
 			System.out.println("  11. delete key pair             12. information about the AWS account");
-			System.out.println("  13. enable monitoring           99. quit                  ");
+			System.out.println("  13. enable monitoring           14. disable monitoring    ");
+			System.out.println("  99. quit    ");
 			System.out.println("------------------------------------------------------------");
 			System.out.print("Enter an integer: ");
 			
@@ -130,6 +132,9 @@ public class awsTest {
 					break;
 				case 13:
 					enableMonitor();
+					break;
+				case 14:
+					disableMonitor();
 					break;
 				case 99:
 					flag = false;
@@ -381,5 +386,27 @@ public class awsTest {
 		ec2.monitorInstances(request);
 		
 		System.out.println("Successfully enabled monitoring");
+	}
+	
+	/*
+	 * 14번 기능
+	 * 참고 : https://docs.aws.amazon.com/code-samples/latest/catalog/java-ec2-src-main-java-aws-example-ec2-MonitorInstance.java.html
+	 */
+	@SuppressWarnings("unchecked")
+	public static void disableMonitor() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter instnace id: ");
+		String id = sc.next();
+		
+		DryRunSupportedRequest<UnmonitorInstancesRequest> dryRequest = () -> {
+		    UnmonitorInstancesRequest request = new UnmonitorInstancesRequest().withInstanceIds(id);
+		    return request.getDryRunRequest();
+		};
+		DryRunResult dry_response = ec2.dryRun(dryRequest);
+
+		UnmonitorInstancesRequest request = new UnmonitorInstancesRequest().withInstanceIds(id);
+		ec2.unmonitorInstances(request);
+		
+		System.out.println("Successfully disabled monitoring");
 	}
 }
