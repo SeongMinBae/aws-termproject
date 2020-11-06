@@ -346,12 +346,12 @@ public class awsTest {
 		
 		for (ListIterator iter = accountList.listIterator(); iter.hasNext(); ) {
 			AccountAttribute attribute = (AccountAttribute) iter.next();
-			System.out.print("attribute : "+attribute.getAttributeName());
+			System.out.print(attribute.getAttributeName());
 			List<AccountAttributeValue> values = attribute.getAttributeValues();
 			
 			for (ListIterator iterVals = values.listIterator(); iterVals.hasNext(); ) {
 				AccountAttributeValue AccVal = (AccountAttributeValue) iterVals.next();
-				System.out.println(AccVal.getAttributeValue());
+				System.out.println(" = " + AccVal.getAttributeValue());
 			}
 		}	
 	}
