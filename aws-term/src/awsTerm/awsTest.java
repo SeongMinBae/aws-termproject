@@ -252,9 +252,10 @@ public class awsTest {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter ami id: ");
 		String id = sc.next();
+		
 		RunInstancesRequest run_request = new RunInstancesRequest()
 												    .withImageId(id)
-												    .withInstanceType(InstanceType.T1Micro)
+												    .withInstanceType(InstanceType.T2Micro)
 												    .withMaxCount(1)
 												    .withMinCount(1);
 
@@ -370,7 +371,7 @@ public class awsTest {
 	 * 13번 기능
 	 * 참고 : https://docs.aws.amazon.com/code-samples/latest/catalog/java-ec2-src-main-java-aws-example-ec2-MonitorInstance.java.html
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("all")
 	public static void enableMonitor() {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter instnace id: ");
@@ -392,7 +393,7 @@ public class awsTest {
 	 * 14번 기능
 	 * 참고 : https://docs.aws.amazon.com/code-samples/latest/catalog/java-ec2-src-main-java-aws-example-ec2-MonitorInstance.java.html
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("all")
 	public static void disableMonitor() {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter instnace id: ");
